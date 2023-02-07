@@ -11,7 +11,7 @@ A CLI tool for parsing .eml files exported from various email services such as O
 The **`-s`** indicates which service provided the EML file. Current available service options are **Outlook**, **Gmail**, **Proton** or **Zimbra**. The
 **`-f`** indicates which file will be parsed.
 
-[![asciicast](https://asciinema.org/a/DPZxBwAhRQ93bjdi7DTVjoAw7.svg)](https://asciinema.org/a/DPZxBwAhRQ93bjdi7DTVjoAw7)
+[![asciicast](https://asciinema.org/a/6LOYenBNZv4XmHOywU2OGL3ir.svg)](https://asciinema.org/a/6LOYenBNZv4XmHOywU2OGL3ir)
 
 ## Credits :star::
 All credits goes to the original tool creator and the original repository can be found [here](https://github.com/rf-peixoto/kain).
