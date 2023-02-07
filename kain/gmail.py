@@ -5,6 +5,21 @@ import re
 # FIXME: The code returns only the first receiver in case of more than one. 
 
 class Gmail:
+    """
+    A class for parsing Gmail emails and extracting header information.
+
+    Attributes:
+        header_patterns (Dict[str, List[str]]): A dictionary of header fields and the regular expression patterns to match them.
+        content (str): The contents of the email file, as read by the Core.reader method.
+        from_ (Union[None, List[str]]): The sender of the email, extracted using the _get_value method.
+        replyto (Union[None, List[str]]): The reply-to address of the email, extracted using the _get_value method.
+        to (Union[None, List[str]]): The recipients of the email, extracted using the _get_value method.
+        source_ip (Union[None, List[str]]): The source IP of the email, extracted using the _get_value method.
+        spf (Union[None, List[str]]): The SPF value of the email, extracted using the _get_value method.
+        dmarc (Union[None, List[str]]): The DMARC value of the email, extracted using the _get_value method.
+        dkim (Union[None, List[str]]): The DKIM value of the email, extracted using the _get_value method.
+    """
+
     def __init__(self, filename: str) -> None:
         """
         Initialize Gmail class with email file name.
