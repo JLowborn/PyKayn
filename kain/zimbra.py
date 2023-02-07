@@ -1,12 +1,12 @@
-from core import Core
 from typing import Union, Dict, List
 import re
 
+
 class Zimbra:
     """
-    A class for parsing Zimbra emails and extracting header information.
+    ### A class for parsing Zimbra emails and extracting header information.
 
-    Attributes:
+    #### Attributes:
         header_patterns (Dict[str, List[str]]): A dictionary of header fields and the regular expression patterns to match them.
         content (str): The contents of the email file, as read by the Core.reader method.
         from_ (Union[None, List[str]]): The sender of the email, extracted using the _get_value method.
@@ -20,11 +20,11 @@ class Zimbra:
 
     def __init__(self, filename: str) -> None:
         """
-        Initialize the Zimbra class.
+        ### Initialize the Zimbra class.
 
         Reads the email file using the `reader` method of the `Core` class and initializes the class attributes with the extracted header information.
 
-        Args:
+        #### Args:
             filename (str): The name of the email file to be parsed.
         """
         self.header_patterns = {
@@ -35,43 +35,47 @@ class Zimbra:
             "DMARC": [r'DMARC.*(pass|fail)', r'(pass|fail)'],
             "DKIM": [r'DKIM.*(pass|fail)', r'(pass|fail)']
         }
-        self.content = Core.reader(filename)
-        self.from_ = self._get_value("From")
-        self.replyto = self._get_value("Reply-To")
-        self.to = self._get_value("To")
-        self.source_ip = self._get_value("Source IP")
-        self.spf = self._get_value("SPF")
-        self.dmarc = self._get_value("DMARC")
-        self.dkim = self._get_value("DKIM")
+
+        with open(filename, "r", encoding="latin-1") as file:
+            self.content = file.read()
+
+        self.from_ = self._get_value("From") or "Unknown"
+        self.replyto = self._get_value("Reply-To") or "Unknown"
+        self.to = self._get_value("To") or "Unknown"
+        self.source_ip = self._get_value("Source IP") or "Unknown"
+        self.spf = self._get_value("SPF") or "Unknown"
+        self.dmarc = self._get_value("DMARC") or "Unknown"
+        self.dkim = self._get_value("DKIM") or "Unknown"
 
     def _get_value(self, keyword: str) -> Union[None, List[str]]:
         """
-        Extract a header field value from the email content.
+        ### Extract a header field value from the email content.
 
         Matches the email content against the regular expression patterns in `header_patterns` for the specified keyword and returns the first match.
 
-        Args:
+        #### Args:
             keyword (str): The header field to be extracted.
 
-        Returns:
+        #### Returns:
             Union[None, List[str]]: The extracted header field value, or None if no match is found.
         """
         patterns = self.header_patterns[keyword]
         content = self.content
         try:
             for pattern in patterns:
-                    content = re.search(pattern, content, re.IGNORECASE|re.MULTILINE).group()
+                content = re.search(
+                    pattern, content, re.IGNORECASE | re.MULTILINE).group()
             return content
         except AttributeError:
             return
 
     def get_headers(self) -> Dict[str, Union[str, None]]:
         """
-        Read the content of an email file.
+        ### Read the content of an email file.
 
         Returns a dictionary of email header fields and their values.
 
-        Returns:
+        #### Returns:
             dict: A dictionary of email header fields and their values.
         """
         return {
@@ -81,5 +85,5 @@ class Zimbra:
             "Source IP": self.source_ip,
             "SPF": self.spf,
             "DMARC": self.dmarc,
-            "DKIM": self.dkim,  
+            "DKIM": self.dkim,
         }
