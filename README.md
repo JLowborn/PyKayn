@@ -8,7 +8,8 @@ A CLI tool for parsing .eml files exported from various email services such as O
 
 **`kain.py -s <service> -f <file>`**
 
-The **`-s`** indicates which service provided the EML file. Current available service options are **Outlook**, **Gmail**, **Proton** or **Zimbra**. The **`-f`** indicates which file will be parsed.
+The **`-s`** indicates which service provided the EML file. Current available service options are **Outlook**, **Gmail**, **Proton** or **Zimbra**. The
+**`-f`** indicates which file will be parsed.
 
 [![asciicast](https://asciinema.org/a/DPZxBwAhRQ93bjdi7DTVjoAw7.svg)](https://asciinema.org/a/DPZxBwAhRQ93bjdi7DTVjoAw7)
 
