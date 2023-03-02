@@ -1,9 +1,11 @@
-from typing import Union
 import argparse
 import os
+from typing import Union
 
-from kain import Outlook, Gmail, Zimbra, Proton
+from kain import Gmail, Outlook, Proton, Zimbra
 from kain.constants import *
+
+# TODO: Export PGP keys/signatures and attachments
 
 
 def main() -> None:
@@ -16,6 +18,9 @@ def main() -> None:
     service = create_service(*args.file, *args.service)
     headers = service.get_headers()
 
+    if args.export:
+        service.get_attachments()
+
     for k, v in headers.items():
         color = RED if v == "fail" else GREEN
         print(f"{color}{'[' + k + ']':<15}{RESET} {v}")
@@ -24,14 +29,30 @@ def main() -> None:
 def parse_args() -> None:
     # Parse CLI arguments
     parser = argparse.ArgumentParser(description="Parse EML files.")
-    parser.add_argument("-f", "--file", required=True, nargs=1, metavar="FILENAME",
-                        help="email header file to be parsed", type=validate_file)
-    parser.add_argument("-s", "--service", required=True, nargs=1, metavar="SERVICE",
-                        help="email provider to be used", choices=("outlook", "zimbra", "proton", "gmail"))
-    parser.add_argument("-o", "--output", required=False, nargs=1,
-                        metavar="FILENAME", help="output results to a json file")
-    parser.add_argument("--no-banner", required=False,
-                        action='store_true', help="don't show banner")
+    parser.add_argument(
+        "-f",
+        "--file",
+        required=True,
+        nargs=1,
+        metavar="FILENAME",
+        help="email header file to be parsed",
+        type=validate_file,
+    )
+    parser.add_argument(
+        "-s",
+        "--service",
+        required=True,
+        nargs=1,
+        metavar="SERVICE",
+        help="email provider to be used",
+        choices=("outlook", "zimbra", "proton", "gmail"),
+    )
+    parser.add_argument(
+        "--export", required=False, action="store_true", help="export email attachments"
+    )
+    parser.add_argument(
+        "--no-banner", required=False, action="store_true", help="don't show banner"
+    )
     args = parser.parse_args()
 
     return args
@@ -58,13 +79,15 @@ def validate_file(file) -> str:
 
 def banner() -> None:
     # Prints a banner
-    print(f"{GREEN} __________          ____  __.        .__          \n",
-          "\______   \ ___.__.|    |/ _|_____   |__|  ____   \n",
-          " |     ___/<   |  ||      <  \__  \  |  | /    \  \n",
-          " |    |     \___  ||    |  \  / __ \_|  ||   |  \ \n",
-          " |____|     / ____||____|__ \(____  /|__||___|  / \n",
-          "            \/             \/     \/          \/  \n",
-          f"  v1.0            EML Parser{RESET}\n")
+    print(
+        f"{GREEN} __________          ____  __.        .__          \n",
+        "\______   \ ___.__.|    |/ _|_____   |__|  ____   \n",
+        " |     ___/<   |  ||      <  \__  \  |  | /    \  \n",
+        " |    |     \___  ||    |  \  / __ \_|  ||   |  \ \n",
+        " |____|     / ____||____|__ \(____  /|__||___|  / \n",
+        "            \/             \/     \/          \/  \n",
+        f"  v1.0            EML Parser{RESET}\n",
+    )
 
 
 def run() -> None:

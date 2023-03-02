@@ -1,8 +1,10 @@
-from typing import Union, Dict, List
 import re
+from typing import Dict, List, Union
+
+from .export import Export
 
 
-class Gmail:
+class Gmail(Export):
     """
     ### A class for parsing Gmail emails and extracting header information.
 
@@ -28,13 +30,25 @@ class Gmail:
             filename (str): The name of the email file to be parsed.
         """
         self.header_patterns = {
-            "From": [r'From:.*\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b', r'\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b'],
-            "Reply-To": [r'Reply-To:.*\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b', r'\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b'],
-            "To": [r'^To:.*\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b', r'\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b'],
-            "Source IP": [r'spf.*([0-9]{1,3}[\.]){3}[0-9]{1,3}', r'([0-9]{1,3}[\.]){3}[0-9]{1,3}'],
-            "SPF": [r'SPF.*(pass|fail)', r'(pass|fail)'],
-            "DMARC": [r'DMARC.*(pass|fail)', r'(pass|fail)'],
-            "DKIM": [r'DKIM.*(pass|fail)', r'(pass|fail)'],
+            "From": [
+                r"From:.*\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b",
+                r"\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b",
+            ],
+            "Reply-To": [
+                r"Reply-To:.*\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b",
+                r"\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b",
+            ],
+            "To": [
+                r"^To:.*\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b",
+                r"\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b",
+            ],
+            "Source IP": [
+                r"spf.*([0-9]{1,3}[\.]){3}[0-9]{1,3}",
+                r"([0-9]{1,3}[\.]){3}[0-9]{1,3}",
+            ],
+            "SPF": [r"SPF.*(pass|fail)", r"(pass|fail)"],
+            "DMARC": [r"DMARC.*(pass|fail)", r"(pass|fail)"],
+            "DKIM": [r"DKIM.*(pass|fail)", r"(pass|fail)"],
         }
 
         with open(filename, "r", encoding="latin-1") as file:
@@ -47,6 +61,13 @@ class Gmail:
         self.spf = self._get_value("SPF") or "Unknown"
         self.dmarc = self._get_value("DMARC") or "Unknown"
         self.dkim = self._get_value("DKIM") or "Unknown"
+
+    def get_attachments(self) -> None:
+        """
+        ### Export email attachments to external folder
+        """
+        super().__init__()
+        super().get_attachments(self.content)
 
     def _get_value(self, keyword: str) -> Union[None, List[str]]:
         """
@@ -65,7 +86,8 @@ class Gmail:
         try:
             for pattern in patterns:
                 content = re.search(
-                    pattern, content, re.IGNORECASE | re.MULTILINE).group()
+                    pattern, content, re.IGNORECASE | re.MULTILINE
+                ).group()
             return content
         except AttributeError:
             return
@@ -88,10 +110,3 @@ class Gmail:
             "DMARC": self.dmarc,
             "DKIM": self.dkim,
         }
-
-
-if __name__ == "__main__":
-    from pprint import pprint as pp
-    gmail = Gmail(
-        filename="/home/rebellion/Área de trabalho/Kain/samples/good_day.eml")
-    pp(gmail.get_headers())
