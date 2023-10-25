@@ -1,5 +1,7 @@
 # Python Kain
 
+![PyKain](https://github.com/JLowborn/PyKayn/assets/64245567/0efcf26f-1b4f-4bd6-8f6a-d6e8b2c1c5e5)
+
 Kain is a comprehensive metadata parser designed specifically for parsing EML files. It provides an efficient means of obtaining crucial information, including SPF, DMARC, DKIM, source IP, and addresses, to aid in forensic investigations. It is important to note that the syntax of EML files may vary based on the email service they were exported from. Currently, Kain supports Outlook, Gmail, Zimbra, and Proton syntax, however it may not be compatible with EML files from other sources. Additionally, this is an early version of the tool and there may be some errors present. Nevertheless, it is a valuable tool for forensic experts.
 
 ![Demo](https://user-images.githubusercontent.com/64245567/217329028-cbfa8923-2d20-410b-8d5b-de29526208d2.png)
