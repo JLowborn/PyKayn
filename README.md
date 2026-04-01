@@ -1,6 +1,5 @@
 # Python Kain
 
-## Description:
 Kain is a specialized metadata parser built in Python, designed to streamline the analysis of .eml files during digital forensic investigations. It automates the extraction of critical security headers and authentication records, providing investigators with a clear view of an email's origin and integrity.
 
 ## Key Features:
